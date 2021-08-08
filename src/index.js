@@ -66,15 +66,21 @@ class App extends React.Component {
 
     modelPromise
     .then(model => {
-      let mapImg = new Image()   
-      mapImg.crossOrigin = 'anonymous'  
-      mapImg.onload =  () => {
-        this.imgRef.current = mapImg
-        requestAnimationFrame(() => {
-          this.detectFrame(mapImg, model);
-        })
-      }
-      mapImg.src = this.getImageUrl()  
+      google.maps.event.addListener(map,"dragend", () => {
+        let mapImg = new Image()      
+        console.log('dragged!') 
+        mapImg.crossOrigin = 'anonymous'  
+        mapImg.onload =  () => {
+          this.imgRef.current = mapImg
+          requestAnimationFrame(() => {
+            this.detectFrame(mapImg, model);
+          })
+        }
+        mapImg.onerror= () => {
+          console.log("error!")
+        }   
+        mapImg.src = this.getImageUrl()  
+      })
     })
     .catch(error => {
       console.error(error);
